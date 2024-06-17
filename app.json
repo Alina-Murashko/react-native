@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "react-native-test",
+    "slug": "react-native-test",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/SF-Pro-Display-Bold.otf", "./assets/fonts/SF-Pro-Display-Regular.otf",
+            "./assets/fonts/SF-Pro-Display-Thin.otf", "./assets/fonts/Syncopate-Bold.otf", "./assets/fonts/Syncopate-Regular.otf"  ]
+        }
+      ]
+    ]
+  }
+}
