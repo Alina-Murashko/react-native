@@ -1,4 +1,4 @@
-import {ScrollView,  StyleSheet, Text, TouchableOpacity, View, ViewProps, ViewStyle} from "react-native";
+import {ScrollView,  StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import GoBack from "../assets/goback.svg";
 import Plus from "../assets/plus.svg";
 import Copy from "../assets/copy.svg";
@@ -7,20 +7,43 @@ import {dp, dpHeight, dpWeight, h, sp, w} from "../const/consts";
 import { Card } from "../common/components/Card";
 import { Background } from "../common/components/Background";
 import { Title } from "../common/components/Title";
+import * as Clipboard from 'expo-clipboard';
+import {useSelector} from "react-redux";
+import {AppRootStateType} from "../app/store";
+import {pickImage} from "../const/screen";
+import {screenActions} from "../app/screenReducer";
+import {useAppDispatch} from "../common/hooks/useAppDispatch";
+
 export const Upload = ({navigation}) => {
+    const  dispatch = useAppDispatch()
+    const assetId = useSelector((state: AppRootStateType) => state.app.assetProcessedId)
+    const cover = useSelector((state: AppRootStateType) => state.app.assets
+        .filter(cover => cover.assetId === assetId)[0]?.uri)
+
+    const description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.Fusce quis est ut dui faucibus dapibus nec vel erat.'
     const goBack = () => {
         navigation.goBack();
     };
 
-    const addItem = () => {
-        navigation.navigate('Home');
+    const addItem = async () => {
+        try {
+            const resultImg = await pickImage()
+            dispatch(screenActions.setScreen({screen: resultImg}))
+            dispatch(screenActions.setProcessedIdScreen({assetId: resultImg.assetId}))
+            navigation.navigate('Upload');
+        } catch {
+        }
     };
 
     const generateMore = () => {
-        //generateMoreScreen
         navigation.navigate('Home–2')
-
     };
+
+    const fetchCopiedText = async () => {
+      await Clipboard.setStringAsync(description);
+    };
+
+
     return (
             <ScrollView showsHorizontalScrollIndicator={false}  showsVerticalScrollIndicator={false}>
                 <Background styles={styles.containerBackground}>
@@ -38,15 +61,16 @@ export const Upload = ({navigation}) => {
                                   width={dpWeight(w,70)}/>
                         </TouchableOpacity>
                     </View>
-                    <Card style={[styles.card]}/>
-                    <Text style={styles.tapToCopy}>Tap to copy rizz</Text>
+                    <Card style={[styles.card]} screenUri={cover}/>
+                    <Text  style={styles.tapToCopy}>Tap to copy rizz</Text>
                 </Background>
                     <View style={styles.container}>
                         <View style={[styles.containerCopy,styles.ios, styles.android]}>
-                            <Text style={styles.descriptionCopy}>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Fusce quis est ut dui faucibus dapibus nec vel erat.</Text>
+                            <Text selectable={true} style={styles.descriptionCopy} children={description}/>
                             <View style={styles.containerCopyIcon} >
-                                <Copy color={styles.copyIcon.color} height={dp(80)} width={dp(80)}/>
+                                <TouchableOpacity onPress={fetchCopiedText}>
+                                    <Copy color={styles.copyIcon.color} height={dp(80)} width={dp(80)}/>
+                                </TouchableOpacity>
                                 <Text style={styles.copyText}> copy</Text>
                             </View>
                         </View>

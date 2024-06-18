@@ -12,13 +12,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alinamurashko.reactnativetest"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.alinamurashko.reactnativetest"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -27,10 +29,20 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/SF-Pro-Display-Bold.otf", "./assets/fonts/SF-Pro-Display-Regular.otf",
-            "./assets/fonts/SF-Pro-Display-Thin.otf", "./assets/fonts/Syncopate-Bold.otf", "./assets/fonts/Syncopate-Regular.otf"  ]
+          "fonts": [
+            "./assets/fonts/SF-Pro-Display-Bold.otf",
+            "./assets/fonts/SF-Pro-Display-Regular.otf",
+            "./assets/fonts/SF-Pro-Display-Thin.otf",
+            "./assets/fonts/Syncopate-Bold.otf",
+            "./assets/fonts/Syncopate-Regular.otf"
+          ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "db2cbdc4-bad8-442c-a5a0-b4734c9b3d1d"
+      }
+    }
   }
 }

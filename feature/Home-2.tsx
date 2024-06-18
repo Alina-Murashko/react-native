@@ -7,34 +7,33 @@ import Close from "../assets/close.svg";
 import {Title} from "../common/components/Title";
 import {Background} from "../common/components/Background";
 import uuid from 'react-native-uuid';
-
-type Item = {
-    cover: string;
-    id: string;
-};
-const dataScreens: Item[] =Array.from({ length: 50 }, (_, i) => ({
-    cover: '',
-    id: uuid.v4().toString(),
-}));
+import {useSelector} from "react-redux";
+import {AppRootStateType} from "../app/store";
+import {useAppDispatch} from "../common/hooks/useAppDispatch";
+import {screenActions} from "../app/screenReducer";
 
 export const Home2 = ({navigation}) => {
-    const onDelete = () => {
-        //delete screen
+
+    const  dispatch = useAppDispatch()
+    const assets = useSelector((state: AppRootStateType) => state.app.assets)
+    const onDelete = (assetId: string) => {
+        dispatch(screenActions.deleteScreen({assetId}))
     }
     const onUpload = () => {
-       navigation.navigate("Upload")
+       navigation.navigate("Home")
     }
 
     return (
         <Background styles={styles.container}>
                 <Title style={styles.title}/>
-                <FlatList data={dataScreens} renderItem={({item}) => <Screen onDelete={onDelete} /> }
-                          keyExtractor={item => item.id}
-                          numColumns={3}
-                          showsVerticalScrollIndicator={false}
-                          columnWrapperStyle={styles.flatList}
-                          contentContainerStyle={styles.containerFlatList}
-                />
+            {assets && <FlatList data={assets} renderItem={({item}) => <Screen assetId={item.assetId}
+                                                                     uri={item.uri} onDelete={onDelete}/>}
+                       keyExtractor={item => item.assetId}
+                       numColumns={3}
+                       showsVerticalScrollIndicator={false}
+                       columnWrapperStyle={styles.flatList}
+                       contentContainerStyle={styles.containerFlatList}
+            />}
                 <ButtonFlatList onUpload={onUpload}/>
         </Background>
 
@@ -42,6 +41,7 @@ export const Home2 = ({navigation}) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         paddingHorizontal: dpWeight(w,100),
         paddingTop: dpHeight(h,192),
         position: "relative",
@@ -99,12 +99,14 @@ const ButtonFlatList = ({onUpload}: ButtonFlatListProps) => {
 }
 
 type ScreenProps = {
-    onDelete: () => void
+    onDelete: (assetId: string) => void
+    uri: string
+    assetId: string
 }
-const Screen = ({onDelete}: ScreenProps) => {
+const Screen = ({onDelete, uri, assetId}: ScreenProps) => {
     return <View style={stylesScreen.container}>
-        <Card style={[stylesScreen.card,stylesScreen.ios, stylesScreen.android]} styleText={stylesScreen.text}>
-            <TouchableOpacity style={stylesScreen.touchable} onPress={ onDelete}>
+        <Card style={[stylesScreen.card,stylesScreen.ios, stylesScreen.android]} styleText={stylesScreen.text} screenUri={uri}>
+            <TouchableOpacity style={stylesScreen.touchable} onPress={ () => onDelete(assetId)}>
                 <Close color={stylesScreen.icon.color} width={ dpWeight(w,70)} height={ dpHeight(h,70)}/>
             </TouchableOpacity>
         </Card>
@@ -123,6 +125,7 @@ const stylesScreen = StyleSheet.create({
         width: dpWeight(w,70),
         height: dpHeight(h,70),
         position: 'absolute',
+        zIndex: 999,
         bottom: 10,
         right: 10,
     },

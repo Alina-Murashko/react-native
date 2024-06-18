@@ -3,11 +3,24 @@ import {dp, dpHeight, dpWeight, h, sp, w} from "../const/consts";
 import {ButtonComponent} from "../common/components/ButtonComponent";
 import {Background} from "../common/components/Background";
 import {Title} from "../common/components/Title";
+import {pickImage} from "../const/screen";
+import {screenActions} from "../app/screenReducer";
+import {useAppDispatch} from "../common/hooks/useAppDispatch";
 
 export const Home = ({navigation}) => {
-    const generateMore = () => {
-        navigation.navigate('Upload');
+
+   const  dispatch = useAppDispatch()
+    const generateMore = async () => {
+        try {
+            const resultImg = await pickImage()
+            dispatch(screenActions.setScreen({screen: resultImg}))
+            dispatch(screenActions.setProcessedIdScreen({assetId: resultImg.assetId}))
+            navigation.navigate('Upload');
+        } catch {
+        }
+
     };
+
     return (
         <Background styles={styles.container}>
             <View style={styles.containerText}>

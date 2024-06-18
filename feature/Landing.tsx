@@ -4,6 +4,8 @@ import {useEffect} from "react";
 
 export const Landing = ({navigation}) => {
 
+
+
     useEffect(() => {
         // Тут нужна логига по запросу me, если пакет не куплен то на Paywall
         // , если куплен на 'Home

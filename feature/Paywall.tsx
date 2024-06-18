@@ -1,9 +1,10 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {BackHandler, FlatList, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {CardPayment} from "../common/components/CardPayment";
-import {dp, dpHeight, dpWeight, h, sp, w} from "../const/consts";
+import { dpHeight, dpWeight, h, sp, w} from "../const/consts";
 import uuid from "react-native-uuid";
 import GoBack from '../assets/goback.svg'
 import Match from '../assets/match.svg'
+
 
 type Offers = {
     id: string
@@ -40,14 +41,20 @@ export const Paywall = ({navigation}) => {
         //перевод после оплаты на Home
         navigation.navigate('Home')
     }
-    const goBack = () => {
-        navigation.goBack()
+
+    const backAction = () => {
+        if (Platform.OS === 'ios') {
+            navigation.navigation('Landing')
+        } else {
+            BackHandler.exitApp();
+        }
+        return true;
     }
 
     return(
         <View style={styles.container}>
             <View style={styles.flex}>
-           <TouchableOpacity style={styles.touchable} onPress={goBack}>
+           <TouchableOpacity style={styles.touchable} onPress={backAction}>
                 <GoBack color={styles.goBack.color} width={dpWeight(w,70)} height={dpHeight(h,70)}/>
             </TouchableOpacity>
                 <Match width={'100%'} height={'70%'} preserveAspectRatio="xMidYMid slice"/>

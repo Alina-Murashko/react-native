@@ -7,6 +7,8 @@ import { Home } from "./feature/Home";
 import {Upload} from "./feature/Upload";
 import {Home2} from "./feature/Home-2";
 import {useFonts} from "expo-font";
+import {store} from "./app/store";
+import {Provider} from "react-redux";
 
 
 export const fontFamily = {
@@ -34,6 +36,7 @@ function App() {
     }
 
   return (
+      <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName={"Landing"}>
             <Stack.Screen name={"Landing"} component={Landing} />
@@ -43,6 +46,7 @@ function App() {
             <Stack.Screen name={'Home–2'} component={Home2} />
         </Stack.Navigator>
       </NavigationContainer>
+      </Provider>
   );
 }
 
